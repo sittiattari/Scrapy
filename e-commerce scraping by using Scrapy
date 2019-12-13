@@ -1,0 +1,15 @@
+import scrapy
+
+class NooreSpider(scrapy.Spider):
+	name='noore'
+	start_urls=['https://nooresporthijab.com/collections/swimwear/Swimwear']
+
+	def parse(self, response):
+		for noore_swimwear in response.xpath("//div[contains(@class,'grid__item grid-product')]"):
+
+			yield{
+				'noore_name_product': noore_swimwear.xpath(".//div[@class='grid-product__title grid-product__title--body']/text()").extract_first(),
+				'original_price': noore_swimwear.xpath(".//div[@class='grid-product__price']/span/span[@class='money']/text()").extract_first(),
+				'sale_price': noore_swimwear.xpath(".//div[@class='grid-product__price']/span[@class='money']/text()").extract_first(),
+				'tag': noore_swimwear.xpath(".//div[contains(@class,'grid-product__tag')]/text()").extract_first()
+			}
